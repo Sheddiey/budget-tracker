@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import Signup from "./Pages/Signup";
 import Login from "./Pages/Login";
+import Welcome from "./Pages/Welcome";
 
 const App = () => {
   return (
@@ -10,8 +11,9 @@ const App = () => {
       <div>
         <section>
           <Routes>
-            <Route path="/" element={Signup} />
-            <Route path="/login" element={Login} />
+            <Route path="/" element={<Welcome />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </section>
       </div>
