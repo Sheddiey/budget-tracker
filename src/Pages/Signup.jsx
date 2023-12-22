@@ -15,7 +15,7 @@ const Signup = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         console.log(user);
-        navigate("/login");
+        navigate("/home");
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -46,6 +46,7 @@ const Signup = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="password"
                 />
               </div>
               <button type="submit" onClick={onSubmit}>

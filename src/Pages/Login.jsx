@@ -8,6 +8,7 @@ const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -21,6 +22,7 @@ const Login = () => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        setError(error);
       });
   };
   return (
@@ -39,6 +41,7 @@ const Login = () => {
                   required
                   placeholder="Email Address"
                   onChange={(e) => setEmail(e.target.value)}
+                  style={{ borderColor: error ? "red" : "" }}
                 />
               </div>
               <div>
