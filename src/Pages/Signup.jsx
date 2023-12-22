@@ -27,35 +27,37 @@ const Signup = () => {
     <main>
       <section>
         <div>
-          <div>
+          <div className="login-page">
             <h1>Budget Tracker</h1>
             <form action="">
-              <div>
+              <div className="email-input">
                 <label htmlFor="email-address">Email Address</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  placeholder="Email address"
+                  placeholder="Email Address"
                 />
               </div>
-              <div>
+              <div className="password-input">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="password"
+                  placeholder="Password"
                 />
               </div>
-              <button type="submit" onClick={onSubmit}>
+              <button className="btn-login" type="submit" onClick={onSubmit}>
                 Sign up
               </button>
             </form>
             <p>
               Already have an account?
-              <NavLink to="/login">Sign in</NavLink>
+              <span>
+                <NavLink to="/login">Sign in</NavLink>
+              </span>
             </p>
           </div>
         </div>

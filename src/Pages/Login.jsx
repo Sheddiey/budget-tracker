@@ -29,10 +29,12 @@ const Login = () => {
     <>
       <main>
         <section>
-          <div>
-            <h1>Budget Tracker</h1>
+          <div className="login-page">
+            <h1>
+              Budget <span>Tracker</span>
+            </h1>
             <form action="">
-              <div>
+              <div className="email-input">
                 <label htmlFor="email-address">Email Address</label>
                 <input
                   type="email"
@@ -44,7 +46,7 @@ const Login = () => {
                   style={{ borderColor: error ? "red" : "" }}
                 />
               </div>
-              <div>
+              <div className="password-input">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"
@@ -56,12 +58,16 @@ const Login = () => {
                 />
               </div>
               <div>
-                <button onClick={onLogin}>Login</button>
+                <button className="btn-login" onClick={onLogin}>
+                  Login
+                </button>
               </div>
             </form>
             <p>
               No account yet?
-              <NavLink to="/signup">Sign up</NavLink>
+              <span>
+                <NavLink to="/signup">Sign up</NavLink>
+              </span>
             </p>
           </div>
         </section>
