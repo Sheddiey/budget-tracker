@@ -28,7 +28,7 @@ const Signup = () => {
       <section>
         <div>
           <div className="login-page">
-            <h1>Budget Tracker</h1>
+            <h1>Budget <span>Tracker</span></h1>
             <form action="">
               <div className="email-input">
                 <label htmlFor="email-address">Email Address</label>
