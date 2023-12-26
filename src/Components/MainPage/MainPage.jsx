@@ -38,20 +38,20 @@ const MainPage = () => {
               </div>
             </div>
             <div className="line md:hidden"></div>
-            <div className="hidden">
-              <div>
+            <div className="text-center flex flex-col gap-[20px]">
+              <div className="text-3xl font-bold mt-[70px]">
                 <h5>
-                  Looks Like You Havent Added Any <span>Expenses Yet.</span>
+                  Looks Like You Havent Added Any <span className="text-[#51d289]">Expenses Yet.</span>
                 </h5>
               </div>
               <div>
-                <h5>No Worries, Just Hit The 'Add' Button To Get Started</h5>
+                <h5>No Worries, Just Hit The <span className="text-[#51d289]">'Add'</span> Button To Get Started</h5>
               </div>
-              <div>
+              <div className="text-3xl text-[#51d289]">
                 <FontAwesomeIcon icon={faCartShopping} />
               </div>
             </div>
-            <div className="flex flex-col">
+            <div className="flex hidden flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">

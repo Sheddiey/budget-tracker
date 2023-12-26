@@ -1,8 +1,16 @@
 import React from "react";
 import banner from "../../Assets/barner.png";
 import "./home.css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const onStart = (e) => {
+    navigate("/mainpage");
+  }
+
+
   return (
     <div className="flex welcome">
       <div className="hidden md:block banner">
@@ -20,7 +28,7 @@ const Home = () => {
           </div>
         </div>
         <div className="btn mt-[60px]">
-          <input type="submit" value="Start Your Calculation" />
+          <input type="submit" value="Start Your Calculation" onClick={onStart} />
         </div>
       </div>
     </div>

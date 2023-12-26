@@ -9,10 +9,10 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Josefin Sans', sans-serif;  
-  /* display: flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;*/
+  min-height: 100vh;
   background-color: #131212; 
   margin-bottom: 30px;
 }
@@ -80,6 +80,9 @@ p {
 .email-input label,
 .password-input label {
   font-size: 20px;
+}
+.password-input .mismatch {
+  outline: 2px solid red;
 }
 .new-btn {
   font-size: 14px;
@@ -231,4 +234,8 @@ p {
 .shadow-mb{
   box-shadow: 0px 4px 12px 0px rgba(255, 255, 255, 0.04);
   
+}
+
+.mismatch {
+  border-color: red;
 }
