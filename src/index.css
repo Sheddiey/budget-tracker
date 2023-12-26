@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,11 +8,13 @@ body {
   font-family: 'Arial', sans-serif;
   margin: 0;
   padding: 0;
+  font-family: 'Josefin Sans', sans-serif;  
   /* display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;*/
   background-color: #393636; 
+  margin-bottom: 30px;
 }
 
 .welcome-container {
@@ -126,6 +130,30 @@ p {
   border-radius: 8px;
   margin-bottom: 10px;
 }
+.card {
+  background-color: #fffde7;
+  padding: 10px;  
+  margin-block: auto;
+  box-shadow: 0px 3.51px 13.161px 0px rgba(0, 0, 0, 0.05);
+  
+}
+.card p {
+  font-size: 14px;
+  color: black;
+}
+.icon-container{
+  border: 2px solid #51d289;
+  height: 41.239px;
+  width: 41.239px;
+  border-radius: 41.239px;
+  padding: 3.5px;
+  cursor: pointer;
+}
+.goals-section{
+  border-left: 6px solid #51d289;
+  padding: 5px;
+}
+
 /* circle */
 .outer-circle {
   width: 200px;
@@ -154,10 +182,4 @@ p {
   justify-content: center;
   position: absolute;
 }
-.icon-container{
-  border: 2px solid #51d289;
-  height: 41.239px;
-  width: 41.239px;
-  border-radius: 41.239px;
-  padding: 3.5px;
-}
+

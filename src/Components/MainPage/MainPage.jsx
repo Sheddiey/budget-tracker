@@ -71,50 +71,68 @@ const MainPage = () => {
           <section className="section">
             <div>
               <div>
-                <h2>Optionals</h2>
+                <h2 className="text-center text-[24px]">Optionals</h2>
                 <div className="top-line line"></div>
               </div>
               <div className="card">
-                <p className="text-center uppercase">Choose any fix Expenses</p>
-                <div className="flex">
-                  <div className="icon-container">
-                    <img src={netflix} alt="" />
+                <h3 className="text-center uppercase mb-[20px] font-bold text-[14px]">
+                  Choose any fix Expenses
+                </h3>
+                <div className="grid gap-[20px]">
+                  <div className="flex justify-between">
+                    <div className="flex gap-[15px]">
+                      <div className="icon-container">
+                        <img src={netflix} alt="" />
+                      </div>
+                      <p>NETFLIX</p>
+                    </div>
+                    <button className="select-btn">select</button>
                   </div>
-                  <p>NETFLIX</p>
-                  <button className="select-btn">select</button>
-                </div>
-                <div className="flex">
-                  <div className="icon-container">
-                    <img src={spotify} alt="" />
+                  <div className="flex justify-between">
+                    <div className="flex gap-[15px]">
+                      <div className="icon-container">
+                        <img src={spotify} alt="" />
+                      </div>
+                      <p>SPOTIFY</p>
+                    </div>
+                    <button className="select-btn">select</button>
                   </div>
-                  <p>SPOTIFY</p>
-                  <button className="select-btn">select</button>
-                </div>
-                <div className="flex">
-                  <div className="icon-container">
-                    <img src={amazon} alt="" />
+                  <div className="flex justify-between">
+                    <div className="flex gap-[15px]">
+                      <div className="icon-container">
+                        <img src={amazon} alt="" />
+                      </div>
+                      <p>AMAZON</p>
+                    </div>
+                    <button className="select-btn">select</button>
                   </div>
-                  <p>AMAZON</p>
-                  <button className="select-btn">select</button>
-                </div>
-                <div className="flex">
-                  <div className="icon-container">
-                    <img src={google} alt="" />
+                  <div className="flex justify-between">
+                    <div className="flex gap-[15px]">
+                      <div className="icon-container">
+                        <img src={google} alt="" />
+                      </div>
+                      <p>GOOGLE</p>
+                    </div>
+                    <button className="select-btn">select</button>
                   </div>
-                  <p>GOOGLE</p>
-                  <button className="select-btn">select</button>
-                </div>
-                <div className="flex">
-                  <div className="icon-container">
-                    <img src={facebook} alt="" />
+                  <div className="flex justify-between">
+                    <div className="flex gap-[15px]">
+                      <div className="icon-container">
+                        <img src={facebook} alt="" />
+                      </div>
+                      <p>FACEBOOK</p>
+                    </div>
+                    <button className="select-btn">select</button>
                   </div>
-                  <p>FACEBOOK</p>
-                  <button className="select-btn">select</button>
                 </div>
               </div>
               <div className="bottom-line line"></div>
-              <h2 className="text-center">Goals</h2>
-              <p>"Save 10% of this amount entered this month from my salary"</p>
+              <h2 className="text-center text-[24px]">Goals</h2>
+              <div className="goals-section">
+                <p className="font-bold text-black">
+                  "Save 10% of this amount entered this month from my salary"
+                </p>
+              </div>
             </div>
           </section>
         </div>
