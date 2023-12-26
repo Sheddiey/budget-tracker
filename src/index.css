@@ -123,6 +123,14 @@ p {
   border-bottom: 1px dotted rgb(147, 140, 140);
   margin: 10px 0 20px 0px;
 }
+.line-1{
+  margin-block: 20px;
+  border-bottom: 2px solid rgb(248, 233, 233);
+}
+.line-2{
+  margin-block: 20px;
+  border-bottom: 1px dotted rgb(248, 233, 233);
+}
 .icome-available{
   background-color: black;
   width: 100%;
@@ -152,6 +160,17 @@ p {
 .goals-section{
   border-left: 6px solid #51d289;
   padding: 5px;
+}
+.icon-container-expenses{
+  background-color: #51d289;
+  height: 35.401px;
+  width: 35.401px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  cursor: pointer;
 }
 
 /* circle */

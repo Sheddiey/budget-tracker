@@ -3,7 +3,7 @@ import "./Navbar.css";
 
 const Navbar = () => {
   return (
-    <nav className="grid space-between text-[#fff] top-[0px] p-[30px]">
+    <nav className="grid w-[309px] mx-[auto] space-between text-[#fff] top-[0px]">
       <div className="">
         <div>
           <img src="" alt="" />

@@ -1,7 +1,15 @@
 import React from "react";
 import Navbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBuilding,
+  faCartShopping,
+  faCreditCard,
+  faGamepad,
+  faPiggyBank,
+  faSuitcaseMedical,
+  faUtensils,
+} from "@fortawesome/free-solid-svg-icons";
 import netflix from "../../Assets/netflix-1-logo-svgrepo-com.svg";
 import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
@@ -14,24 +22,130 @@ const MainPage = () => {
       <Navbar />
       <main>
         <div className="grid">
-          <section>
-            <div className="flex space-between">
-              <h4>Description</h4>
-              <div className="flex">
-                <h4>Filter Expenses</h4>
-                <option value="All">All</option>
+          <section className="order-last w-[309px] text-white mx-[auto] md:order-first">
+            <div className="line-1 md:hidden"></div>
+            <div className="flex justify-between items-center mb-[20px]">
+              <h4 className="text-[#ffe600]">Description </h4>
+              <div className="flex border-[#ffe600] border-2 text-[14px] p-[3px]">
+                <h4>Filter Expenses |</h4>
+                <select
+                  name="option"
+                  id="options"
+                  className="text-[#ffe600] outline-none bg-transparent"
+                >
+                  <option value="All">All</option>
+                </select>
               </div>
             </div>
-            <div>
-              <h5>
-                Looks Like You Havent Added Any <span>Expenses Yet.</span>
-              </h5>
+            <div className="line md:hidden"></div>
+            <div className="hidden md:block">
+              <div>
+                <h5>
+                  Looks Like You Havent Added Any <span>Expenses Yet.</span>
+                </h5>
+              </div>
+              <div>
+                <h5>No Worries, Just Hit The 'Add' Button To Get Started</h5>
+              </div>
+              <div>
+                <FontAwesomeIcon icon={faCartShopping} />
+              </div>
             </div>
-            <div>
-              <h5>No Worries, Just Hit The 'Add' Button To Get Started</h5>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faCartShopping} />
+            <div className="flex flex-col">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon className="icon" icon={faCreditCard} />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Debts</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div>
+              <div className="line-2"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon className="icon" icon={faUtensils} />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Food</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div><div className="line-2"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon className="icon" icon={faGamepad} />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Hobbie</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div><div className="line-2"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon className="icon" icon={faBuilding} />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Rent</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div><div className="line-2"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon className="icon" icon={faPiggyBank} />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Savings</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div><div className="line-2"></div>
+              <div className="flex items-center justify-between">
+                <div className="flex gap-[10px]">
+                  <div className="icon-container-expenses">
+                    <FontAwesomeIcon
+                      className="icon"
+                      icon={faSuitcaseMedical}
+                    />{" "}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-[18px]">Health</h3>
+                    <p className="mt-[-10px] text-white">
+                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
+                      december, 12-23
+                    </p>
+                  </div>
+                </div>
+                <h4 className="text-[24px]">$125,000</h4>
+              </div>
             </div>
           </section>
           <section className="section my-[30px]">
