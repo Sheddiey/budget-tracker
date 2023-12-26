@@ -100,3 +100,64 @@ p {
 .login-page p span:hover{
   color: #0c9eff;
 }
+
+/* Mainpage component */
+.section{
+  width: 309px;
+  height: 610.977px;
+  background: #FBFBFB;
+  margin-inline: auto;
+  padding: 8.778px 28.44px 9.236px 27.213px;
+  border-radius: 10px;
+}
+.section > * {
+  height: 100%;  
+  display: grid;
+  padding-block: 10px;
+} 
+.line {
+  border-bottom: 1px dotted rgb(147, 140, 140);
+  margin: 10px 0 20px 0px;
+}
+.icome-available{
+  background-color: black;
+  width: 100%;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+/* circle */
+.outer-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: conic-gradient(
+    #51d289 0% 20%, 
+    lightgray 20% 100% 
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-inline: auto;
+  margin-block: 30px;
+}
+
+.inner-circle {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background-color: #fff; /* You can change the color as needed */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+.icon-container{
+  border: 2px solid #51d289;
+  height: 41.239px;
+  width: 41.239px;
+  border-radius: 41.239px;
+  padding: 3.5px;
+}
