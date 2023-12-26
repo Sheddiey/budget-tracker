@@ -21,8 +21,8 @@ const MainPage = () => {
     <div>
       <Navbar />
       <main>
-        <div className="grid">
-          <section className="order-last w-[309px] text-white mx-[auto] md:order-first">
+        <div className="grid md:grid-cols-3 sm:grid-cols-2 w-[90%] md:w-[95%] mx-[auto] gap-[40px]">
+          <section className="order-last w-[100%] md:col-span-1 sm:col-span-2 p-[10px] bg-[#393636] rounded-[10px] text-white mx-[auto] md:order-first shadow-lg">
             <div className="line-1 md:hidden"></div>
             <div className="flex justify-between items-center mb-[20px]">
               <h4 className="text-[#ffe600]">Description </h4>
@@ -38,7 +38,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="line md:hidden"></div>
-            <div className="hidden md:block">
+            <div className="hidden">
               <div>
                 <h5>
                   Looks Like You Havent Added Any <span>Expenses Yet.</span>
@@ -148,7 +148,7 @@ const MainPage = () => {
               </div>
             </div>
           </section>
-          <section className="section my-[30px]">
+          <section className="section w-[100%] shadow-mb">
             <div>
               <div className="text-center text-[24px]">
                 <h2>Calculation</h2>
