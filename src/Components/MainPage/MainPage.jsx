@@ -21,8 +21,8 @@ const MainPage = () => {
     <div>
       <Navbar />
       <main>
-        <div className="grid md:grid-cols-3 sm:grid-cols-2 w-[90%] md:w-[95%] mx-[auto] gap-[40px]">
-          <section className="order-last w-[100%] md:col-span-1 sm:col-span-2 p-[10px] bg-[#393636] rounded-[10px] text-white mx-[auto] md:order-first shadow-lg">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 w-[90%] md:w-[95%] mx-[auto] gap-[40px]">
+          <section className="order-last w-[100%] md:col-span-2 lg:col-span-1 p-[10px] bg-[#393636] rounded-[10px] text-white mx-[auto] lg:order-first shadow-lg">
             <div className="line-1 md:hidden"></div>
             <div className="flex justify-between items-center mb-[20px]">
               <h4 className="text-[#ffe600]">Description </h4>
@@ -182,7 +182,7 @@ const MainPage = () => {
               </button>
             </div>
           </section>
-          <section className="section">
+          <section className="section w-[100%]">
             <div>
               <div>
                 <h2 className="text-center text-[24px]">Optionals</h2>
