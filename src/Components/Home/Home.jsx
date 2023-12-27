@@ -7,12 +7,12 @@ const Home = () => {
   const navigate = useNavigate();
 
   const onStart = (e) => {
-    navigate("/mainpage");
+    navigate("/dashboard");
   }
 
 
   return (
-    <div className="flex welcome">
+    <div className="flex welcome w-[90%] mx-[auto] ">
       <div className="hidden md:block banner">
         <img src={banner} alt="banner" />
       </div>
