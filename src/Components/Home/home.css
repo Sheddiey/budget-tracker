@@ -11,6 +11,7 @@
     width: 323px;
     height: 53px;
     border-radius: 5px;
+    cursor: pointer;
 }
 .income-input-section h2{
     font-size: 40px;

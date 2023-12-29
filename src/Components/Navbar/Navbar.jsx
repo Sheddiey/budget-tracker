@@ -3,7 +3,7 @@ import "./Navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleUser } from "@fortawesome/free-solid-svg-icons";
 
-const Navbar = () => {
+const Navbar = ({userData}) => {
   return (
     <div className="my-[25px]">
       <nav className="flex flex-col pb-[10px] md:flex-row justify-between w-[90%] md:w-[95%] mx-[auto] space-between text-[#fff] top-[0px]">
@@ -19,7 +19,9 @@ const Navbar = () => {
           <button className="hidden md:block new-btn">New Expense</button>
           <div className="flex text-2xl gap-[5px] items-center">
             <FontAwesomeIcon className="icon-user" icon={faCircleUser} />
-            <h5>Welcome Alexander!</h5>
+            {userData.map((user) => (
+              <h3 key={user.id} className="capitalize">{user.name}</h3>
+            ))}
           </div>
         </div>
       </nav>

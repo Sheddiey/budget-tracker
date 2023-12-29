@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -15,11 +15,24 @@ import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
 import google from "../../Assets/google.svg";
 import facebook from "../../Assets/facebook-1.svg";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const MainPage = () => {
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collection(db, "userData"));
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setUserData(data);
+    };
+
+    fetchData();
+  }, []);
   return (
     <div>
-      <Navbar />
+      <Navbar userData={userData} />
       <main>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 w-[90%] md:w-[95%] mx-[auto] gap-[40px]">
           <section className="order-last w-[100%] md:col-span-2 lg:col-span-1 p-[10px] bg-[#393636] rounded-[10px] text-white mx-[auto] lg:order-first shadow-lg">
@@ -38,20 +51,25 @@ const MainPage = () => {
               </div>
             </div>
             <div className="line md:hidden"></div>
-            <div className="text-center flex flex-col gap-[20px]">
+            <div className="text-center hidden flex flex-col gap-[20px]">
               <div className="text-3xl font-bold mt-[70px]">
                 <h5>
-                  Looks Like You Havent Added Any <span className="text-[#51d289]">Expenses Yet.</span>
+                  Looks Like You Havent Added Any{" "}
+                  <span className="text-[#51d289]">Expenses Yet.</span>
                 </h5>
               </div>
               <div>
-                <h5>No Worries, Just Hit The <span className="text-[#51d289]">'Add'</span> Button To Get Started</h5>
+                <h5>
+                  No Worries, Just Hit The{" "}
+                  <span className="text-[#51d289]">'Add'</span> Button To Get
+                  Started
+                </h5>
               </div>
               <div className="text-3xl text-[#51d289]">
                 <FontAwesomeIcon icon={faCartShopping} />
               </div>
             </div>
-            <div className="flex hidden flex-col">
+            <div className="flex  flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">
@@ -82,7 +100,8 @@ const MainPage = () => {
                   </div>
                 </div>
                 <h4 className="text-[24px]">$125,000</h4>
-              </div><div className="line-2"></div>
+              </div>
+              <div className="line-2"></div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">
@@ -97,7 +116,8 @@ const MainPage = () => {
                   </div>
                 </div>
                 <h4 className="text-[24px]">$125,000</h4>
-              </div><div className="line-2"></div>
+              </div>
+              <div className="line-2"></div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">
@@ -112,7 +132,8 @@ const MainPage = () => {
                   </div>
                 </div>
                 <h4 className="text-[24px]">$125,000</h4>
-              </div><div className="line-2"></div>
+              </div>
+              <div className="line-2"></div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">
@@ -127,7 +148,8 @@ const MainPage = () => {
                   </div>
                 </div>
                 <h4 className="text-[24px]">$125,000</h4>
-              </div><div className="line-2"></div>
+              </div>
+              <div className="line-2"></div>
               <div className="flex items-center justify-between">
                 <div className="flex gap-[10px]">
                   <div className="icon-container-expenses">
@@ -154,17 +176,21 @@ const MainPage = () => {
                 <h2>Calculation</h2>
                 <div className="top-line line"></div>
               </div>
-              <div className="income grid text-center uppercase font-bold shadow-lg bg-white">
-                <p className="text-[12px]">Income</p>
-                <h3 className="text-[26px]">$2,700.00</h3>
-              </div>
+              {userData.length > 0 && (
+                <div className="income grid text-center uppercase font-bold shadow-lg bg-white">
+                  <p className="text-[12px]">Income</p>
+                  <h3 className="text-[26px]">
+                    ${userData[0].income.toLocaleString()}
+                  </h3>
+                </div>
+              )}
               <div>
-                <circle className="outer-circle">
+                <div className="outer-circle">
                   <div className="inner-circle">
                     <p className="text-[24px] text-black">20%</p>
                     <p className="bottom-[50px] absolute">spent</p>
                   </div>
-                </circle>
+                </div>
               </div>
               <div className="flex gap-[10px]">
                 <div className="icome-available shadow py-[3px] text-bold uppercase">
@@ -242,11 +268,11 @@ const MainPage = () => {
               </div>
               <div className="bottom-line line"></div>
               <h2 className="text-center text-[24px]">Goals</h2>
-              <div className="goals-section">
-                <p className="font-bold text-black">
-                  "Save 10% of this amount entered this month from my salary"
-                </p>
-              </div>
+              {userData.length > 0 && (
+                <div className="goals-section w-[104px]">
+                  <p className="font-bold text-black">{userData[0].goals}</p>
+                </div>
+              )}
             </div>
           </section>
         </div>
