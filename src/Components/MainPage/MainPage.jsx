@@ -15,7 +15,16 @@ import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
 import google from "../../Assets/google.svg";
 import facebook from "../../Assets/facebook-1.svg";
-import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  updateDoc,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import ExpenseItem from "../Expenses/ExpenseItem";
 import ExpenseForm from "../Expenses/ExpenseForm";
@@ -38,18 +47,41 @@ const MainPage = () => {
   const handleSave = async (data) => {
     const userId = userData.length > 0 ? userData[0].uid : null;
     const userDocRef = doc(db, "userData", userId);
-    const expensesCollectionRef = collection(userDocRef, "expenses");
-
-    if (editData) {
-      const expenseDocRef = doc(expensesCollectionRef, editData.id);
-      await updateDoc(expenseDocRef, data);
-    } else {
-      await addDoc(expensesCollectionRef, data);
+    const expensesDocRef = doc(userDocRef, "expenses");
+  
+    if (!userId) {
+      console.error("User ID not available");
+      return;
     }
-
-    fetchData();
-    closeForm(); 
+  
+    try {
+      const userSnapshot = await getDoc(userDocRef);
+  
+      if (userSnapshot.exists()) {
+        const existingData = userSnapshot.data();
+        const existingExpenses = existingData.expenses || [];
+  
+        if (editData) {
+          const updatedExpenses = existingExpenses.map((expense) =>
+            expense.id === editData.id ? { ...expense, ...data } : expense
+          );
+  
+          await updateDoc(userDocRef, { expenses: updatedExpenses });
+        } else {
+          const newExpenses = [...existingExpenses, data];
+          await updateDoc(userDocRef, { expenses: newExpenses });
+        }
+      } else {
+        await setDoc(userDocRef, { expenses: [data] });
+      }
+  
+      fetchData();
+      closeForm();
+    } catch (error) {
+      console.error("Error saving expense:", error);
+    }
   };
+  
 
   const handleDelete = async (id) => {
     const userId = userData.length > 0 ? userData[0].uid : null;
@@ -72,15 +104,18 @@ const MainPage = () => {
       console.error("User ID not available");
       return;
     }
-
+  
     const userId = userData[0].uid;
     const userDocRef = doc(db, "userData", userId);
-    const expensesCollectionRef = collection(userDocRef, "expenses");
-
-    const querySnapshot = await getDocs(expensesCollectionRef);
-    const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
-    setUserData(data);
+    const userSnapshot = await getDoc(userDocRef);
+  
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.data();
+      const expenses = userData.expenses || [];
+      setUserData(expenses);
+    } else {
+      console.error("User document not found");
+    }
   };
 
   useEffect(() => {
@@ -126,17 +161,17 @@ const MainPage = () => {
               </div>
             </div>
             {isFormOpen && (
-              <ExpenseForm onSave={handleSave} onClose={closeForm} editData={editData} />
+              <ExpenseForm
+                onSave={handleSave}
+                onClose={closeForm}
+                editData={editData}
+              />
             )}
-            <ExpenseItem />
             {userData.map((data) => (
               <ExpenseItem
                 key={data.id}
-                icon={faCartShopping}
-                title={data.title} // Assuming you have a title property in your data
-                category={data.category} // Assuming you have a category property in your data
-                date={data.date} // Assuming you have a date property in your data
-                amount={data.amount} // Assuming you have an amount property in your data
+                category={data.title}
+                amount={data.cost}
                 onDelete={() => handleDelete(data.id)}
                 onEdit={() => handleEdit(data)}
               />

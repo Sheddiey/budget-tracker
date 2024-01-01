@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 const ExpenseItem = ({ title, amount, onDelete, onEdit }) => {
+    const formattedDate = new Date().toLocaleDateString();
   return (
     <div>
       <div className="line-2"></div>
@@ -14,8 +15,7 @@ const ExpenseItem = ({ title, amount, onDelete, onEdit }) => {
           <div className="flex flex-col">
             <h3 className="text-[18px]">{title}</h3>
             <p className="mt-[-10px] text-white">
-              <span className="text-[12px] text-gray-400">Date:</span> december,
-              12-23
+              <span className="text-[12px] text-gray-400">Date:</span> {formattedDate}
             </p>
           </div>
         </div>
