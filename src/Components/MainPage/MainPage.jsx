@@ -15,24 +15,80 @@ import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
 import google from "../../Assets/google.svg";
 import facebook from "../../Assets/facebook-1.svg";
-import { collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import ExpenseItem from "../Expenses/ExpenseItem";
+import ExpenseForm from "../Expenses/ExpenseForm";
 
 const MainPage = () => {
   const [userData, setUserData] = useState([]);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editData, setEditData] = useState(null);
+
+  const openForm = () => {
+    setIsFormOpen(true);
+    setEditData(null);
+  };
+
+  const closeForm = () => {
+    setIsFormOpen(false);
+    setEditData(null);
+  };
+
+  const handleSave = async (data) => {
+    const userId = userData.length > 0 ? userData[0].uid : null;
+    const userDocRef = doc(db, "userData", userId);
+    const expensesCollectionRef = collection(userDocRef, "expenses");
+
+    if (editData) {
+      const expenseDocRef = doc(expensesCollectionRef, editData.id);
+      await updateDoc(expenseDocRef, data);
+    } else {
+      await addDoc(expensesCollectionRef, data);
+    }
+
+    fetchData();
+    closeForm(); 
+  };
+
+  const handleDelete = async (id) => {
+    const userId = userData.length > 0 ? userData[0].uid : null;
+    const userDocRef = doc(db, "userData", userId);
+    const expensesCollectionRef = collection(userDocRef, "expenses");
+    const expenseDocRef = doc(expensesCollectionRef, id);
+
+    await deleteDoc(expenseDocRef);
+
+    fetchData();
+  };
+
+  const handleEdit = (data) => {
+    setEditData(data);
+    setIsFormOpen(true);
+  };
+
+  const fetchData = async () => {
+    if (userData.length === 0 || !userData[0].uid) {
+      console.error("User ID not available");
+      return;
+    }
+
+    const userId = userData[0].uid;
+    const userDocRef = doc(db, "userData", userId);
+    const expensesCollectionRef = collection(userDocRef, "expenses");
+
+    const querySnapshot = await getDocs(expensesCollectionRef);
+    const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+
+    setUserData(data);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "userData"));
-      const data = querySnapshot.docs.map((doc) => doc.data());
-      setUserData(data);
-    };
-
     fetchData();
   }, []);
   return (
     <div>
-      <Navbar userData={userData} />
+      <Navbar userData={userData} openForm={openForm} />
       <main>
         <div className="grid lg:grid-cols-3 md:grid-cols-2 w-[90%] md:w-[95%] mx-[auto] gap-[40px]">
           <section className="order-last w-[100%] md:col-span-2 lg:col-span-1 p-[10px] bg-[#393636] rounded-[10px] text-white mx-[auto] lg:order-first shadow-lg">
@@ -51,7 +107,7 @@ const MainPage = () => {
               </div>
             </div>
             <div className="line md:hidden"></div>
-            <div className="text-center hidden flex flex-col gap-[20px]">
+            <div className="text-center  flex flex-col gap-[20px]">
               <div className="text-3xl font-bold mt-[70px]">
                 <h5>
                   Looks Like You Havent Added Any{" "}
@@ -69,106 +125,22 @@ const MainPage = () => {
                 <FontAwesomeIcon icon={faCartShopping} />
               </div>
             </div>
-            <div className="flex  flex-col">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon className="icon" icon={faCreditCard} />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Debts</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-              <div className="line-2"></div>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon className="icon" icon={faUtensils} />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Food</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-              <div className="line-2"></div>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon className="icon" icon={faGamepad} />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Hobbie</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-              <div className="line-2"></div>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon className="icon" icon={faBuilding} />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Rent</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-              <div className="line-2"></div>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon className="icon" icon={faPiggyBank} />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Savings</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-              <div className="line-2"></div>
-              <div className="flex items-center justify-between">
-                <div className="flex gap-[10px]">
-                  <div className="icon-container-expenses">
-                    <FontAwesomeIcon
-                      className="icon"
-                      icon={faSuitcaseMedical}
-                    />{" "}
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className="text-[18px]">Health</h3>
-                    <p className="mt-[-10px] text-white">
-                      <span className="text-[12px] text-gray-400">Date:</span>{" "}
-                      december, 12-23
-                    </p>
-                  </div>
-                </div>
-                <h4 className="text-[24px]">$125,000</h4>
-              </div>
-            </div>
+            {isFormOpen && (
+              <ExpenseForm onSave={handleSave} onClose={closeForm} editData={editData} />
+            )}
+            <ExpenseItem />
+            {userData.map((data) => (
+              <ExpenseItem
+                key={data.id}
+                icon={faCartShopping}
+                title={data.title} // Assuming you have a title property in your data
+                category={data.category} // Assuming you have a category property in your data
+                date={data.date} // Assuming you have a date property in your data
+                amount={data.amount} // Assuming you have an amount property in your data
+                onDelete={() => handleDelete(data.id)}
+                onEdit={() => handleEdit(data)}
+              />
+            ))}
           </section>
           <section className="section w-[100%] shadow-mb">
             <div>
