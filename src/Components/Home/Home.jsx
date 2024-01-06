@@ -3,7 +3,7 @@ import banner from "../../Assets/barner.png";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -24,28 +24,40 @@ const Home = () => {
 
   const onStart = async () => {
     const user = auth.currentUser;
-    if (!user) {
-      console.error("User not Authenticated");
+
+    if(!user) {
+      console.error("User not authenticated");
       return;
     }
 
     const userId = user.uid;
 
     try {
-      const docRef = await addDoc(collection(db, "userData"), {
-        userId,
+      const userDocRef = doc(db, "userData", userId);
+
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {
+        await updateDoc(userDocRef, {
         income,
         name,
         goals,
       });
-
-      console.log("Document Written with ID: ", docRef.id);
+      console.log("User document updated succesfully")
 
       navigate("/dashboard");
-    } catch (e) {
-      console.error("Error adding document: ", e);
+      } else {
+        console.warn("User document doesn't exist")
+      }
+
+      
+
+      
+    } catch (error) {
+      console.error("Error updating user document: ", error)
     }
-  };
+  }
+  
 
   return (
     <div className="flex welcome w-[90%] mx-[auto] ">

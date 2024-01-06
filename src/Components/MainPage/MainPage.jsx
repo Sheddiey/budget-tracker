@@ -44,60 +44,7 @@ const MainPage = () => {
     setEditData(null);
   };
 
-  const handleSave = async (data) => {
-    const userId = userData.length > 0 ? userData[0].uid : null;
-    const userDocRef = doc(db, "userData", userId);
-    const expensesDocRef = doc(userDocRef, "expenses");
   
-    if (!userId) {
-      console.error("User ID not available");
-      return;
-    }
-  
-    try {
-      const userSnapshot = await getDoc(userDocRef);
-  
-      if (userSnapshot.exists()) {
-        const existingData = userSnapshot.data();
-        const existingExpenses = existingData.expenses || [];
-  
-        if (editData) {
-          const updatedExpenses = existingExpenses.map((expense) =>
-            expense.id === editData.id ? { ...expense, ...data } : expense
-          );
-  
-          await updateDoc(userDocRef, { expenses: updatedExpenses });
-        } else {
-          const newExpenses = [...existingExpenses, data];
-          await updateDoc(userDocRef, { expenses: newExpenses });
-        }
-      } else {
-        await setDoc(userDocRef, { expenses: [data] });
-      }
-  
-      fetchData();
-      closeForm();
-    } catch (error) {
-      console.error("Error saving expense:", error);
-    }
-  };
-  
-
-  const handleDelete = async (id) => {
-    const userId = userData.length > 0 ? userData[0].uid : null;
-    const userDocRef = doc(db, "userData", userId);
-    const expensesCollectionRef = collection(userDocRef, "expenses");
-    const expenseDocRef = doc(expensesCollectionRef, id);
-
-    await deleteDoc(expenseDocRef);
-
-    fetchData();
-  };
-
-  const handleEdit = (data) => {
-    setEditData(data);
-    setIsFormOpen(true);
-  };
 
   const fetchData = async () => {
     if (userData.length === 0 || !userData[0].uid) {
@@ -162,7 +109,6 @@ const MainPage = () => {
             </div>
             {isFormOpen && (
               <ExpenseForm
-                onSave={handleSave}
                 onClose={closeForm}
                 editData={editData}
               />
@@ -172,8 +118,6 @@ const MainPage = () => {
                 key={data.id}
                 category={data.title}
                 amount={data.cost}
-                onDelete={() => handleDelete(data.id)}
-                onEdit={() => handleEdit(data)}
               />
             ))}
           </section>
