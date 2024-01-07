@@ -3,7 +3,8 @@ import banner from "../../Assets/barner.png";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../../firebase";
-import { addDoc, collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import {  collection, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { createUserDocument } from "../Functions/createUserDocument";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -33,26 +34,22 @@ const Home = () => {
     const userId = user.uid;
 
     try {
-      const userDocRef = doc(db, "userData", userId);
+      const querySnapshot = await getDocs(query(collection(db, 'userData'), where('userId', '==', userId)));
 
-      const userDocSnapshot = await getDoc(userDocRef);
 
-      if (userDocSnapshot.exists()) {
+      if (querySnapshot.size > 0) {
+        const userDocRef = querySnapshot.docs[0].ref;
         await updateDoc(userDocRef, {
-        income,
-        name,
-        goals,
-      });
-      console.log("User document updated succesfully")
-
-      navigate("/dashboard");
+          income,
+          name,
+          goals,
+        });
+        console.log("User document updated succesfully");
+        navigate("/dashboard");
       } else {
-        console.warn("User document doesn't exist")
+        await createUserDocument(userId, income, name, goals);
       }
-
-      
-
-      
+     
     } catch (error) {
       console.error("Error updating user document: ", error)
     }

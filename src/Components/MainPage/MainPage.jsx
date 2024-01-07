@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -28,6 +28,7 @@ import {
 import { db } from "../../firebase";
 import ExpenseItem from "../Expenses/ExpenseItem";
 import ExpenseForm from "../Expenses/ExpenseForm";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const MainPage = () => {
   const [userData, setUserData] = useState([]);
@@ -44,30 +45,98 @@ const MainPage = () => {
     setEditData(null);
   };
 
-  
+  const saveExpenses = async (expenseData) =>{
+    try {
+      // if(userData.length === 0 || !userData[0]) {
+      //   console.error("User data not available");
+      //   return;
+      // }
+
+      const userId = userData[0].userId;
+
+      if(!userId){
+        console.error("User ID not available");
+        return;
+      }
+
+      const userDocRef = doc(db, "userData", userId);
+      const userSnapshot = await getDoc(userDocRef);
+
+      if(userSnapshot.exists()){
+        const userData = userSnapshot.data();
+        const expenses = userData.expenses || [];
+
+        if(editData) {
+          const updatedExpenses = expenses.map((expense) => 
+            expense.id === editData.id ? {...expenseData, id: expense.id } : expense
+          );
+
+          await updateDoc(userDocRef, { ...userData, expenses: updatedExpenses});         
+        } else {
+          const newExpense = {...expenseData, id: new Date().getTime().toString() };
+
+          await updateDoc(userDocRef, {...userData, expenses: [...expenses, newExpense] });
+        }
+
+        fetchData();
+      } else {
+        console.log("user document not found")
+      }
+
+    } catch (e){
+      console.error("Error saving expenses: ", e)
+    }
+  }
+
+  const auth = getAuth();
 
   const fetchData = async () => {
-    if (userData.length === 0 || !userData[0].uid) {
-      console.error("User ID not available");
-      return;
-    }
+    try {
+      // Listen for changes in authentication state
+      const unsubscribe = onAuthStateChanged(auth, async (user) => {
+
+        if (user) {
+          // User is signed in
+          if (user.uid) {
+            const userId = user.uid;
+            const userSnapshot = await getDoc(doc(db, "userData", userId));
+            console.log("user snapshot: ", userSnapshot)
   
-    const userId = userData[0].uid;
-    const userDocRef = doc(db, "userData", userId);
-    const userSnapshot = await getDoc(userDocRef);
+            if (userSnapshot.exists()) {
+              const userData = userSnapshot.data();
+              console.log("User Data:", userData);
+              const expenses = userData.expenses || [];
+              setUserData(expenses);
+            } else {
+              console.error("User document not found");
+              console.log("Raw Data:", userSnapshot.data()); // Log raw data for inspection
+            }
+            
+          } else {
+            console.error("User ID not available");
+          }
+        } else {
+          // User is signed out
+          // Handle the case where there is no signed-in user
+          console.error("No signed-in user");
+        }
+      });
   
-    if (userSnapshot.exists()) {
-      const userData = userSnapshot.data();
-      const expenses = userData.expenses || [];
-      setUserData(expenses);
-    } else {
-      console.error("User document not found");
+      // Unsubscribe from the auth state listener when the component unmounts
+      return () => {
+        unsubscribe();
+      };
+    } catch (error) {
+      console.error("Error fetching user data: ", error);
     }
   };
+  
 
+  
   useEffect(() => {
     fetchData();
-  }, []);
+  }, []); // Run the effect once when the component mounts
+
   return (
     <div>
       <Navbar userData={userData} openForm={openForm} />
@@ -111,6 +180,7 @@ const MainPage = () => {
               <ExpenseForm
                 onClose={closeForm}
                 editData={editData}
+                onSave={saveExpenses}
               />
             )}
             {userData.map((data) => (
