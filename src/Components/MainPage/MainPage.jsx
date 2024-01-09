@@ -99,7 +99,10 @@ const MainPage = () => {
           // User is signed in
           if (user.uid) {
             const userId = user.uid;
-            const userSnapshot = await getDoc(doc(db, "userData", userId));
+            const userDocRef = doc(db, "userData", userId);
+
+            console.log("User Doc Ref Path:", userDocRef);
+            const userSnapshot = await getDoc(userDocRef);
             console.log("user snapshot: ", userSnapshot)
   
             if (userSnapshot.exists()) {
