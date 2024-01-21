@@ -15,25 +15,15 @@ import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
 import google from "../../Assets/google.svg";
 import facebook from "../../Assets/facebook-1.svg";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  setDoc,
-} from "firebase/firestore";
+import ExpenseForm from "../Expenses/ExpenseForm";
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import ExpenseItem from "../Expenses/ExpenseItem";
-import ExpenseForm from "../Expenses/ExpenseForm";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-const MainPage = () => {
-  const [userData, setUserData] = useState([]);
+const MainPage = ({ userData }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [expenses, setExpenses] = useState([]);
 
   const openForm = () => {
     setIsFormOpen(true);
@@ -45,100 +35,24 @@ const MainPage = () => {
     setEditData(null);
   };
 
-  const saveExpenses = async (expenseData) =>{
+  const expensesCollectionRef = collection(db, "expenses");
+  const getExpenses = async () => {
     try {
-      // if(userData.length === 0 || !userData[0]) {
-      //   console.error("User data not available");
-      //   return;
-      // }
-
-      const userId = userData[0].userId;
-
-      if(!userId){
-        console.error("User ID not available");
-        return;
-      }
-
-      const userDocRef = doc(db, "userData", userId);
-      const userSnapshot = await getDoc(userDocRef);
-
-      if(userSnapshot.exists()){
-        const userData = userSnapshot.data();
-        const expenses = userData.expenses || [];
-
-        if(editData) {
-          const updatedExpenses = expenses.map((expense) => 
-            expense.id === editData.id ? {...expenseData, id: expense.id } : expense
-          );
-
-          await updateDoc(userDocRef, { ...userData, expenses: updatedExpenses});         
-        } else {
-          const newExpense = {...expenseData, id: new Date().getTime().toString() };
-
-          await updateDoc(userDocRef, {...userData, expenses: [...expenses, newExpense] });
-        }
-
-        fetchData();
-      } else {
-        console.log("user document not found")
-      }
-
-    } catch (e){
-      console.error("Error saving expenses: ", e)
-    }
-  }
-
-  const auth = getAuth();
-
-  const fetchData = async () => {
-    try {
-      // Listen for changes in authentication state
-      const unsubscribe = onAuthStateChanged(auth, async (user) => {
-
-        if (user) {
-          // User is signed in
-          if (user.uid) {
-            const userId = user.uid;
-            const userDocRef = doc(db, "userData", userId);
-
-            console.log("User Doc Ref Path:", userDocRef);
-            const userSnapshot = await getDoc(userDocRef);
-            console.log("user snapshot: ", userSnapshot)
-  
-            if (userSnapshot.exists()) {
-              const userData = userSnapshot.data();
-              console.log("User Data:", userData);
-              const expenses = userData.expenses || [];
-              setUserData(expenses);
-            } else {
-              console.error("User document not found");
-              console.log("Raw Data:", userSnapshot.data()); // Log raw data for inspection
-            }
-            
-          } else {
-            console.error("User ID not available");
-          }
-        } else {
-          // User is signed out
-          // Handle the case where there is no signed-in user
-          console.error("No signed-in user");
-        }
-      });
-  
-      // Unsubscribe from the auth state listener when the component unmounts
-      return () => {
-        unsubscribe();
-      };
-    } catch (error) {
-      console.error("Error fetching user data: ", error);
+      const userExpenses = await getDocs(expensesCollectionRef);
+      const filteredExpenses = userExpenses.docs.map((expense) => ({
+        ...expense.data(),
+        id: expense.id,
+      }));
+      console.log(filteredExpenses);
+      setExpenses(filteredExpenses);
+    } catch (err) {
+      console.error(err);
     }
   };
-  
 
-  
   useEffect(() => {
-    fetchData();
-  }, []); // Run the effect once when the component mounts
+    getExpenses();
+  }, []);
 
   return (
     <div>
@@ -181,17 +95,19 @@ const MainPage = () => {
             </div>
             {isFormOpen && (
               <ExpenseForm
+                onSave={(data) => {
+                  console.log("Saving data:", data);
+                }}
+                expensesCollectionRef={expensesCollectionRef}
+                getExpenses={getExpenses}
                 onClose={closeForm}
-                editData={editData}
-                onSave={saveExpenses}
               />
             )}
-            {userData.map((data) => (
-              <ExpenseItem
-                key={data.id}
-                category={data.title}
-                amount={data.cost}
-              />
+
+            {expenses.map((expense) => (
+              <div key={expense.userId}>
+                <ExpenseItem title={expense.title} amount={expense.cost} />
+              </div>
             ))}
           </section>
           <section className="section w-[100%] shadow-mb">
@@ -292,9 +208,10 @@ const MainPage = () => {
               </div>
               <div className="bottom-line line"></div>
               <h2 className="text-center text-[24px]">Goals</h2>
+
               {userData.length > 0 && (
-                <div className="goals-section w-[104px]">
-                  <p className="font-bold text-black">{userData[0].goals}</p>
+                <div className="goals-section ">
+                  <p className="font-bold text-black">{userData[0].goals}kkk</p>
                 </div>
               )}
             </div>

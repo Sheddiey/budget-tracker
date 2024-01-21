@@ -1,19 +1,32 @@
+import { addDoc } from "firebase/firestore";
 import React, { useState } from "react";
+import { auth } from "../../firebase";
 
-const ExpenseForm = ({ onSave, onClose }) => {
+const ExpenseForm = ({ onSave, onClose, expensesCollectionRef, getExpenses }) => {
   const [title, setTitle] = useState("");
   const [cost, setCost] = useState("");
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (title.trim() === "" || cost.trim() === "") {
       alert("Please enter both title and cost");
       return;
     }
 
-    onSave({
-      title: title.trim(),
-      cost: cost,
-    });
+    try {
+      await addDoc(expensesCollectionRef, {
+        title: title,
+        cost: cost,
+        userId: auth?.currentUser?.uid,
+      });
+      getExpenses();
+    } catch (err) {
+      console.error(err);
+    }
+
+    // onSave({
+    //   title: title.trim(),
+    //   cost: cost,
+    // });
 
     setTitle("");
     setCost("");
@@ -26,7 +39,6 @@ const ExpenseForm = ({ onSave, onClose }) => {
         className="bg-transparent p-[5px]  border border-dotted outline-none"
         type="text"
         placeholder="Input expense title"
-        value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
       />
@@ -35,7 +47,6 @@ const ExpenseForm = ({ onSave, onClose }) => {
         type="number"
         min="1"
         placeholder="Input expense cost"
-        value={cost}
         onChange={(e) => setCost(e.target.value)}
         required
       />

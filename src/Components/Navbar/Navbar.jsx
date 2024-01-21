@@ -19,9 +19,9 @@ const Navbar = ({userData, openForm}) => {
           <button className="hidden md:block new-btn" onClick={openForm}>New Expense</button>
           <div className="flex text-2xl gap-[5px] items-center">
             <FontAwesomeIcon className="icon-user" icon={faCircleUser} />
-            {userData.map((user) => (
-              <h3 key={user.id} className="capitalize">{user.name}</h3>
-            ))}
+            {userData.length > 0 && (
+              <h3 className="capitalize">{userData[0].name}</h3>
+            )}
           </div>
         </div>
       </nav>
