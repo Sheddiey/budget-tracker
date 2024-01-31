@@ -1,29 +1,21 @@
 import React, { useEffect, useId, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBuilding,
-  faCartShopping,
-  faCreditCard,
-  faGamepad,
-  faPiggyBank,
-  faSuitcaseMedical,
-  faUtensils,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import netflix from "../../Assets/netflix-1-logo-svgrepo-com.svg";
 import spotify from "../../Assets/spotify.svg";
 import amazon from "../../Assets/amazon.svg";
 import google from "../../Assets/google.svg";
 import facebook from "../../Assets/facebook-1.svg";
 import ExpenseForm from "../Expenses/ExpenseForm";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "../../firebase";
 import ExpenseItem from "../Expenses/ExpenseItem";
 
 const MainPage = ({ userData }) => {
+  const [expenses, setExpenses] = useState([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editData, setEditData] = useState(null);
-  const [expenses, setExpenses] = useState([]);
 
   const openForm = () => {
     setIsFormOpen(true);
@@ -34,24 +26,28 @@ const MainPage = ({ userData }) => {
     setIsFormOpen(false);
     setEditData(null);
   };
-
+  const authUid = auth?.currentUser?.uid;
   const expensesCollectionRef = collection(db, "expenses");
   const getExpenses = async () => {
     try {
-      const userExpenses = await getDocs(expensesCollectionRef);
-      const filteredExpenses = userExpenses.docs.map((expense) => ({
-        ...expense.data(),
-        id: expense.id,
+      const expensesQuery = query(
+        expensesCollectionRef,
+        where("userId", "==", authUid)
+      );
+      const querySnapshot = await getDocs(expensesQuery);
+      const userExpenses = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
       }));
-      console.log(filteredExpenses);
-      setExpenses(filteredExpenses);
+      setExpenses(userExpenses);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching expenses: ", err);
     }
   };
-
   useEffect(() => {
-    getExpenses();
+    if (authUid) {
+      getExpenses();
+    }
   }, []);
 
   return (
@@ -75,7 +71,11 @@ const MainPage = ({ userData }) => {
               </div>
             </div>
             <div className="line md:hidden"></div>
-            <div className="text-center  flex flex-col gap-[20px]">
+            <div
+              className={`text-center  flex flex-col gap-[20px] ${
+                expenses.length > 0 ? "hidden" : "block"
+              }`}
+            >
               <div className="text-3xl font-bold mt-[70px]">
                 <h5>
                   Looks Like You Havent Added Any{" "}
@@ -120,7 +120,10 @@ const MainPage = ({ userData }) => {
                 <div className="income grid text-center uppercase font-bold shadow-lg bg-white">
                   <p className="text-[12px]">Income</p>
                   <h3 className="text-[26px]">
-                    ${userData[0].income.toLocaleString()}
+                    {userData[0].income.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
                   </h3>
                 </div>
               )}
@@ -209,11 +212,13 @@ const MainPage = ({ userData }) => {
               <div className="bottom-line line"></div>
               <h2 className="text-center text-[24px]">Goals</h2>
 
-              {userData.length > 0 && (
+              {userData.map((data) => (
                 <div className="goals-section ">
-                  <p className="font-bold text-black">{userData[0].goals}kkk</p>
+                  <p className="font-bold text-black">{userData[1].goals}</p>
                 </div>
-              )}
+              ))}
+                
+              
             </div>
           </section>
         </div>

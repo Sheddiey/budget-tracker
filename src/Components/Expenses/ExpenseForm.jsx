@@ -2,7 +2,12 @@ import { addDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import { auth } from "../../firebase";
 
-const ExpenseForm = ({ onSave, onClose, expensesCollectionRef, getExpenses }) => {
+const ExpenseForm = ({
+  onSave,
+  onClose,
+  expensesCollectionRef,
+  getExpenses,
+}) => {
   const [title, setTitle] = useState("");
   const [cost, setCost] = useState("");
 
@@ -15,7 +20,7 @@ const ExpenseForm = ({ onSave, onClose, expensesCollectionRef, getExpenses }) =>
     try {
       await addDoc(expensesCollectionRef, {
         title: title,
-        cost: cost,
+        cost: Number(cost),
         userId: auth?.currentUser?.uid,
       });
       getExpenses();
@@ -33,6 +38,9 @@ const ExpenseForm = ({ onSave, onClose, expensesCollectionRef, getExpenses }) =>
 
     onClose();
   };
+
+ 
+
   return (
     <div className="grid gap-[10px] ">
       <input
@@ -50,12 +58,20 @@ const ExpenseForm = ({ onSave, onClose, expensesCollectionRef, getExpenses }) =>
         onChange={(e) => setCost(e.target.value)}
         required
       />
-      <input
-        className=" text-black bg-[#ffe600] w-[100%] py-[5px] rounded-[5px] cursor-pointer"
-        type="submit"
-        value="Save Expense"
-        onClick={handleSaveClick}
-      />
+      <div className="flex gap-[10px]">
+        <input
+          className=" text-black bg-[#ffe600] w-[100%] py-[5px] rounded-[5px] cursor-pointer"
+          type="submit"
+          value="Save Expense"
+          onClick={handleSaveClick}
+        />
+        <input
+          className=" text-black bg-[#ffe600] w-[100%] py-[5px] rounded-[5px] cursor-pointer"
+          type="submit"
+          value="Cancel"
+          onClick={onClose}
+        />
+      </div>
     </div>
   );
 };

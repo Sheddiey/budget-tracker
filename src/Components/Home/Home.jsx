@@ -18,7 +18,7 @@ const Home = ({ getUserData, userDataCollectionRef}) => {
     try {
       await addDoc(userDataCollectionRef, {
         name: name,
-        income: income,
+        income: Number(income),
         goals: goals,
         userId: auth?.currentUser?.uid,
       });

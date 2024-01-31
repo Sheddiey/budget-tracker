@@ -6,27 +6,35 @@ import Login from "./Pages/Login";
 import Welcome from "./Pages/Welcome";
 import Home from "./Components/Home/Home";
 import MainPage from "./Components/MainPage/MainPage.jsx";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase.js";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "./firebase.js";
 
 const App = () => {
   const [userData, setUserData] = useState([]);
   const userDataCollectionRef = collection(db, "userData");
-
+  const authUid = auth?.currentUser?.uid;
   const getUserData = async () => {
     try {
-      const data = await getDocs(userDataCollectionRef);
-      const filteredData = data.docs.map((doc) => ({
+      const dataQuery = query(
+        userDataCollectionRef,
+        where("userId", "==", authUid)
+      );
+      const querySnapshot = await getDocs(dataQuery);
+      const AuthUserData = querySnapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
-      setUserData(filteredData);
+      setUserData(AuthUserData);
+      console.log(AuthUserData);
     } catch (err) {
       console.error(err);
     }
   };
+
   useEffect(() => {
-    getUserData();
+    if (authUid) {
+      getUserData();
+    }
   }, []);
   return (
     <Router>
@@ -42,7 +50,7 @@ const App = () => {
                 <Home
                   userDataCollectionRef={userDataCollectionRef}
                   getUserData={getUserData}
-                  setUserData={setUserData}
+                 
                 />
               }
             />
